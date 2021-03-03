@@ -5,11 +5,11 @@ CLOSE_BRACKETS = ')}]'
 PAIRS = {o: c for o, c in zip(CLOSE_BRACKETS, OPEN_BRACKETS)}
 
 
-def is_opener(value: str) -> bool:
+def is_opening(value: str) -> bool:
     return value in OPEN_BRACKETS
 
 
-def is_closer(value: str) -> bool:
+def is_closing(value: str) -> bool:
     return value in CLOSE_BRACKETS
 
 
@@ -24,9 +24,9 @@ def first_decision(string):
         return 'Несбалансированно'
 
     for letter in string:
-        if is_opener(letter):
+        if is_opening(letter):
             stack.push(letter)
-        elif is_closer(letter):
+        elif is_closing(letter):
             if stack.is_empty() or is_pair_brackets(letter, stack.pop()):
                 return 'Несбалансированно'
 
@@ -37,6 +37,6 @@ if __name__ == '__main__':
     print(first_decision('(((([{}]))))'))
     print(first_decision('[([])((([[[]]])))]{()}'))
     print(first_decision('{{[()]}}'))
-    print(first_decision('{}{'))
+    print(first_decision('}{}'))
     print(first_decision('{{[(])]}}'))
     print(first_decision('[[{())}]'))
