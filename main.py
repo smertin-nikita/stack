@@ -20,9 +20,6 @@ def is_pair_brackets(value1: str, value2: str) -> bool:
 def first_decision(string):
     stack = Stack()
 
-    if len(string) % 2:
-        return 'Несбалансированно'
-
     for letter in string:
         if is_opening(letter):
             stack.push(letter)
@@ -30,7 +27,10 @@ def first_decision(string):
             if stack.is_empty() or is_pair_brackets(letter, stack.pop()):
                 return 'Несбалансированно'
 
-    return 'Сбалансированно'
+    if stack.is_empty():
+        return 'Сбалансированно'
+    else:
+        return 'Несбалансированно'
 
 
 if __name__ == '__main__':
