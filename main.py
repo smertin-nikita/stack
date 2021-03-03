@@ -1,10 +1,8 @@
 from stack import Stack
 
-OPEN_BRACKETS = ('(', '{', '[')
-CLOSE_BRACKETS = (')', '}', ']')
-SQUARE_BRACKETS = ('[', ']')
-PARENTHESES = ('(', ')')
-FIGURE_BRACKETS = ('{', '}')
+OPEN_BRACKETS = '({['
+CLOSE_BRACKETS = ')}]'
+PAIRS = {o: c for o, c in zip(CLOSE_BRACKETS, OPEN_BRACKETS)}
 
 
 def is_opener(value: str) -> bool:
@@ -16,11 +14,7 @@ def is_closer(value: str) -> bool:
 
 
 def is_pair_brackets(value1: str, value2: str) -> bool:
-    return (
-            (value1 in SQUARE_BRACKETS and value2 in SQUARE_BRACKETS) or
-            (value1 in PARENTHESES and value2 in PARENTHESES) or
-            (value1 in FIGURE_BRACKETS and value2 in FIGURE_BRACKETS)
-    )
+    return value2 != PAIRS[value1]
 
 
 def first_decision(string):
@@ -32,22 +26,17 @@ def first_decision(string):
     for letter in string:
         if is_opener(letter):
             stack.push(letter)
-        if is_closer(letter):
-            if stack.is_empty():
-                return 'Несбалансированно'
-            elif is_pair_brackets(letter, stack.pop()):
-                continue
-            else:
+        elif is_closer(letter):
+            if stack.is_empty() or is_pair_brackets(letter, stack.pop()):
                 return 'Несбалансированно'
 
     return 'Сбалансированно'
-
 
 
 if __name__ == '__main__':
     print(first_decision('(((([{}]))))'))
     print(first_decision('[([])((([[[]]])))]{()}'))
     print(first_decision('{{[()]}}'))
-    print(first_decision('}{}'))
+    print(first_decision('{}{'))
     print(first_decision('{{[(])]}}'))
     print(first_decision('[[{())}]'))
